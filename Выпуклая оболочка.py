@@ -53,25 +53,25 @@ def convex_hull (a):
         i-=1
 
 
+if(__name__=='__main__'):
+    root = Tk()
+    c=[]
+    canv = Canvas(root, width = 1000, height = 1000, bg = "white")
+    canv.create_line(500,1000,500,0,width=2,arrow=LAST) 
+    canv.create_line(0,500,1000,500,width=2,arrow=LAST)
 
-root = Tk()
-c=[]
-canv = Canvas(root, width = 1000, height = 1000, bg = "white")
-canv.create_line(500,1000,500,0,width=2,arrow=LAST) 
-canv.create_line(0,500,1000,500,width=2,arrow=LAST)
-
-key=300
-for i in range(0,50):
-    a=pt(random.randint(-key,key),random.randint(-key,key))
-    canv.create_oval(a.x-3+500, a.y-3+500, a.x+3+500, a.y+3+500, outline="red", fill="red", width=0)
-    c.append(a)
-convex_hull(c)
-for i in range(1,len(c)):
-    canv.create_oval(c[i].x-3+500, c[i].y-3+500, c[i].x+3+500, c[i].y+3+500, outline="blue", fill="blue", width=0)
-    canv.create_line(c[i-1].x+500,c[i-1].y+500,c[i].x+500,c[i].y+500,width=2,arrow=LAST)
-canv.create_oval(c[0].x-3+500, c[0].y-3+500, c[0].x+3+500, c[0].y+3+500, outline="blue", fill="blue", width=0)   
-canv.create_line(c[len(c)-1].x+500,c[len(c)-1].y+500,c[0].x+500,c[0].y+500)
-canv.pack()	
-root.mainloop()
+    key=300
+    for i in range(0,50):
+        a=pt(random.randint(-key,key),random.randint(-key,key))
+        canv.create_oval(a.x-3+500, a.y-3+500, a.x+3+500, a.y+3+500, outline="red", fill="red", width=0)
+        c.append(a)
+    convex_hull(c)
+    for i in range(1,len(c)):
+        canv.create_oval(c[i].x-3+500, c[i].y-3+500, c[i].x+3+500, c[i].y+3+500, outline="blue", fill="blue", width=0)
+        canv.create_line(c[i-1].x+500,c[i-1].y+500,c[i].x+500,c[i].y+500,width=2,arrow=LAST)
+    canv.create_oval(c[0].x-3+500, c[0].y-3+500, c[0].x+3+500, c[0].y+3+500, outline="blue", fill="blue", width=0)   
+    canv.create_line(c[len(c)-1].x+500,c[len(c)-1].y+500,c[0].x+500,c[0].y+500)
+    canv.pack()	
+    root.mainloop()
 
 
