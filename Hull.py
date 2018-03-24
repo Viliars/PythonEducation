@@ -1,7 +1,7 @@
 import random
 from tkinter import *
 
-class pt:
+class Point:
     def __init__(self,x,y):
         self.x=x
         self.y=y
@@ -21,8 +21,8 @@ def convex_hull (a):
     if (len(a) == 1):
         return
     a.sort()
-    p1 = pt(a[0].x,a[0].y)
-    p2 = pt(a[len(a)-1].x,a[len(a)-1].y)
+    p1 = Point(a[0].x,a[0].y)
+    p2 = Point(a[len(a)-1].x,a[len(a)-1].y)
     canv.create_oval(p1.x-10+500, p1.y-10+500, p1.x+10+500, p1.y+10+500, outline="blue", fill="blue", width=0)
     canv.create_oval(p2.x-10+500, p2.y-10+500, p2.x+10+500, p2.y+10+500, outline="blue", fill="blue", width=0)
     up=[]
@@ -54,15 +54,30 @@ def convex_hull (a):
 
 root = Tk()
 c=[]
+pt=[]
 canv = Canvas(root, width = 1000, height = 1000, bg = "white")
 canv.create_line(500,1000,500,0,width=2,arrow=LAST) 
 canv.create_line(0,500,1000,500,width=2,arrow=LAST)
 
-key=300
-for i in range(0,50):
-    a=pt(random.randint(-key,key),random.randint(-key,key))
-    canv.create_oval(a.x-3+500, a.y-3+500, a.x+3+500, a.y+3+500, outline="red", fill="red", width=0)
-    c.append(a)
+key_x=450
+key_y=350
+mode=str(input())
+if(mode=="random"):
+    for i in range(0,100):
+        a=Point(random.randint(-key_x,key_x),random.randint(-key_y,key_y))
+        canv.create_oval(a.x-3+500, a.y-3+500, a.x+3+500, a.y+3+500, outline="red", fill="red", width=0)
+        c.append(a)
+else:
+    file=open(mode)
+    for line in file:
+        if i%2==0:
+            a=int(line)
+        else:
+            b=int(line)
+            buf=Point(a,b)
+            c.append(buf)
+
+        
 convex_hull(c)
 for i in range(1,len(c)):
     canv.create_oval(c[i].x-3+500, c[i].y-3+500, c[i].x+3+500, c[i].y+3+500, outline="blue", fill="blue", width=0)
@@ -71,5 +86,3 @@ canv.create_oval(c[0].x-3+500, c[0].y-3+500, c[0].x+3+500, c[0].y+3+500, outline
 canv.create_line(c[len(c)-1].x+500,c[len(c)-1].y+500,c[0].x+500,c[0].y+500)
 canv.pack()	
 root.mainloop()
-
-
