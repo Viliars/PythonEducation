@@ -68,6 +68,7 @@ if(mode=="random"):
         canv.create_oval(a.x-3+500, a.y-3+500, a.x+3+500, a.y+3+500, outline="red", fill="red", width=0)
         c.append(a)
 else:
+    i=0
     file=open(mode)
     for line in file:
         if i%2==0:
@@ -76,6 +77,7 @@ else:
             b=int(line)
             buf=Point(a,b)
             c.append(buf)
+        i+=1
 
         
 convex_hull(c)
