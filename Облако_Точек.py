@@ -83,11 +83,6 @@ canv.create_oval(c[ansb].x-5+500, c[ansb].y-5+500, c[ansb].x+5+500, c[ansb].y+5+
 canv.pack()	
 root.mainloop()
 
-#test
 
-test=[9,8,7,6,5,4,3,2,1]
-testi=test
-testi[4:7]=sorted(test[4:7])
-print(testi)
 
               

@@ -1,6 +1,12 @@
+# <head>
+# -- SetA--
+SizeX=1600
+SizeY=900
+# -- --
+
 import random
 from tkinter import *
-
+# Класс Точка
 class Point:
     def __init__(self,x,y):
         self.x=x
@@ -13,18 +19,16 @@ class Point:
 def cw (a, b, c):
     return bool((a.x*(b.y-c.y)+b.x*(c.y-a.y)+c.x*(a.y-b.y)) < 0)
 
-
 def ccw (a, b, c):
     return bool(((a.x*(b.y-c.y)+b.x*(c.y-a.y)+c.x*(a.y-b.y)) > 0))
 
-def convex_hull (a):
+# Вычисление оболочки
+def hull (a):
     if (len(a) == 1):
         return
     a.sort()
     p1 = Point(a[0].x,a[0].y)
     p2 = Point(a[len(a)-1].x,a[len(a)-1].y)
-    canv.create_oval(p1.x-10+500, p1.y-10+500, p1.x+10+500, p1.y+10+500, outline="blue", fill="blue", width=0)
-    canv.create_oval(p2.x-10+500, p2.y-10+500, p2.x+10+500, p2.y+10+500, outline="blue", fill="blue", width=0)
     up=[]
     down=[]
     up.append(p1)
@@ -52,39 +56,46 @@ def convex_hull (a):
         a.append(down[i])
         i-=1
 
-root = Tk()
-c=[]
+
 pt=[]
-canv = Canvas(root, width = 1000, height = 1000, bg = "white")
-canv.create_line(500,1000,500,0,width=2,arrow=LAST) 
-canv.create_line(0,500,1000,500,width=2,arrow=LAST)
-
-key_x=450
-key_y=350
-mode=str(input())
-if(mode=="random"):
-    for i in range(0,100):
-        a=Point(random.randint(-key_x,key_x),random.randint(-key_y,key_y))
-        canv.create_oval(a.x-3+500, a.y-3+500, a.x+3+500, a.y+3+500, outline="red", fill="red", width=0)
-        c.append(a)
-else:
-    i=0
-    file=open(mode)
-    for line in file:
-        if i%2==0:
-            a=int(line)
-        else:
-            b=int(line)
-            buf=Point(a,b)
-            c.append(buf)
-        i+=1
-
-        
-convex_hull(c)
-for i in range(1,len(c)):
-    canv.create_oval(c[i].x-3+500, c[i].y-3+500, c[i].x+3+500, c[i].y+3+500, outline="blue", fill="blue", width=0)
-    canv.create_line(c[i-1].x+500,c[i-1].y+500,c[i].x+500,c[i].y+500,width=2,arrow=LAST)
-canv.create_oval(c[0].x-3+500, c[0].y-3+500, c[0].x+3+500, c[0].y+3+500, outline="blue", fill="blue", width=0)   
-canv.create_line(c[len(c)-1].x+500,c[len(c)-1].y+500,c[0].x+500,c[0].y+500)
-canv.pack()	
+#-----------------------------
+def getXY(event):
+    global pt
+    global canv
+    a=Point(event.x_root,event.y_root)
+    pt.append(a)
+    update()
+    
+def Exit(event):
+    global root
+    root.destroy()
+    
+def Back(event):
+    global pt
+    if(len(pt)>=0):
+        pt.pop()
+    update()
+    
+def update():
+    global c
+    global pt
+    global canv
+    canv.delete("all")
+    for i in range(0,len(pt)):
+        canv.create_oval(pt[i].x-3, pt[i].y-3, pt[i].x+3, pt[i].y+3, outline="red", fill="red", width=0)
+    c=[]
+    c.extend(pt)
+    hull(c)
+    for i in range(1,len(c)):
+        canv.create_line(c[i-1].x,c[i-1].y,c[i].x,c[i].y,width=2,fill="green") 
+    canv.create_line(c[len(c)-1].x,c[len(c)-1].y,c[0].x,c[0].y,fill="green")
+    canv.pack()
+    
+root = Tk()
+root.attributes("-fullscreen", True)
+canv = Canvas(root, width = SizeX, height = SizeY, bg = "white")
+canv.pack()
+root.bind('<Button-1>', getXY)
+root.bind('<Return>',Exit)
+root.bind('<Control-z>', Back)
 root.mainloop()
