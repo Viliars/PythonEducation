@@ -8,17 +8,25 @@ import cv2
 
 
 
-CLASSES = ["Background", "Aeroplane", "Bicycle", "Bird", "Boat",
- "Bottle", "Bus", "Car", "Cat", "Chair", "Cow", "Table",
- "Dog", "Horse", "Motorbike", "PIDOR", "Plant", "Sheep",
- "Sofa", "Train", "Monitor"]
+CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
+	"bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
+	"dog", "horse", "motorbike", "People", "pottedplant", "sheep",
+	"sofa", "train", "tvmonitor"]
 COLORS = np.random.uniform(0, 0, size=(len(CLASSES), 3))
 
-net = cv2.dnn.readNetFromCaffe("data/rec/MobileNetSSD_deploy.prototxt.txt", "data/rec/MobileNetSSD_deploy.caffemodel")
+
+print("[INFO] loading model...")
+net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt.txt", "MobileNetSSD_deploy.caffemodel")
+
+print("[INFO] starting video stream...")
+
+vs = VideoStream(src=0).start()
+time.sleep(2.0)
+fps = FPS().start()
 
 
-def recognize(message, vk):
-
+while True:
+	frame = vs.read()
 	frame = imutils.resize(frame, width=600)
 
 
@@ -48,3 +56,21 @@ def recognize(message, vk):
 			cv2.putText(frame, label, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
 
 
+	cv2.imshow("Frame", frame)
+	key = cv2.waitKey(1) & 0xFF
+
+
+	if key == ord("q"):
+		break
+
+
+	fps.update()
+
+
+fps.stop()
+print("[INFO] elapsed time: {:.2f}".format(fps.elapsed()))
+print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
+
+
+cv2.destroyAllWindows()
+vs.stop()
